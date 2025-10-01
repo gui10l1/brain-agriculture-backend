@@ -3,7 +3,7 @@ version: "3.9"
 services:
   backend:
     build: .
-    container_name: brain-agriculture-backend
+    container_name: backend
     restart: unless-stopped
     ports:
       - "3000:3000"
@@ -14,7 +14,7 @@ services:
 
   db:
     image: postgres:15-alpine
-    container_name: brain-agriculture-backend__db
+    container_name: database
     restart: unless-stopped
     env_file:
       - .env
