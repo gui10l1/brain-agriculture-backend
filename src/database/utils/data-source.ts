@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import { DataSource } from 'typeorm';
 import getDatabaseConfig from '../config/getDatabaseConfig';
 import path from 'path';

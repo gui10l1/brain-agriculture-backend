@@ -4,6 +4,7 @@ interface IDatabaseConfig {
   username: string;
   password: string;
   database: string;
+  synchronize: boolean;
 }
 
 export default function getDatabaseConfig(): IDatabaseConfig {
@@ -13,5 +14,6 @@ export default function getDatabaseConfig(): IDatabaseConfig {
     username: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
     database: process.env.POSTGRES_DATABASE,
+    synchronize: false,
   } as IDatabaseConfig;
 }
