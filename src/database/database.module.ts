@@ -1,19 +1,16 @@
-import { DynamicModule, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import getDatabaseConfig from './config/getDatabaseConfig';
+import dataSourceProvider from './providers/data-source.provider';
 
-@Module({})
-export class DatabaseModule {
-  static forRoot(): DynamicModule {
-    const databaseConfig = {
+@Module({
+  imports: [
+    TypeOrmModule.forRoot({
       type: 'postgres' as const,
       ...getDatabaseConfig(),
-    };
-
-    return {
-      module: DatabaseModule,
-      imports: [TypeOrmModule.forRoot(databaseConfig)],
-      exports: [TypeOrmModule],
-    };
-  }
-}
+    }),
+  ],
+  exports: [TypeOrmModule, dataSourceProvider],
+  providers: [dataSourceProvider],
+})
+export class DatabaseModule {}

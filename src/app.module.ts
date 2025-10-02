@@ -6,7 +6,7 @@ import { DatabaseModule } from './database/database.module';
 import { FarmersModule } from './farmers/farmers.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), DatabaseModule.forRoot(), FarmersModule],
+  imports: [ConfigModule.forRoot(), DatabaseModule, FarmersModule],
   controllers: [AppController],
   providers: [AppService],
 })
