@@ -1,13 +1,12 @@
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { IFarmersRepository } from '../interfaces/repositories.interface';
 import Farmer from '../entities/farmer.entity';
-import dataSource from 'src/database/utils/data-source';
 import { IFarmerDTO } from '../dtos';
 
 export default class FarmersRepository implements IFarmersRepository {
   private ormRepository: Repository<Farmer>;
 
-  constructor() {
+  constructor(dataSource: DataSource) {
     this.ormRepository = dataSource.getRepository(Farmer);
   }
 
