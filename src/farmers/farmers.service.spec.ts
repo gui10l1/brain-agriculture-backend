@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { FarmersService } from './farmers.service';
-import { Provider } from '@nestjs/common';
+import { BadRequestException, Provider } from '@nestjs/common';
 import { FARMER_REPOSITORY_PROVIDER_ID } from './constants';
 import FakeFarmersRepository from './repositories/fake-farmers.repository';
 
@@ -20,7 +20,28 @@ describe('FarmersService', () => {
     service = module.get<FarmersService>(FarmersService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  it('should not be able to create farmers with same document', async () => {
+    const data = {
+      name: 'John Doe',
+      document: 'same-document',
+    };
+
+    await service.create(data);
+
+    await expect(service.create(data)).rejects.toBeInstanceOf(
+      BadRequestException,
+    );
+  });
+
+  it('should be able to create farmers', async () => {
+    const data = {
+      name: 'John Doe',
+      document: 'document',
+    };
+
+    const farmer = await service.create(data);
+
+    expect(farmer).toHaveProperty('id');
+    expect(farmer.id).toBe(1);
   });
 });
