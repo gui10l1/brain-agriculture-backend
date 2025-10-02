@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { FarmersService } from './farmers.service';
-import { BadRequestException, Provider } from '@nestjs/common';
+import { Provider } from '@nestjs/common';
 import { FARMER_REPOSITORY_PROVIDER_ID } from './constants';
 import FakeFarmersRepository from './repositories/fake-farmers.repository';
+import ApiError from 'src/errors/ApiError';
 
 describe('FarmersService', () => {
   let service: FarmersService;
@@ -28,9 +29,7 @@ describe('FarmersService', () => {
 
     await service.create(data);
 
-    await expect(service.create(data)).rejects.toBeInstanceOf(
-      BadRequestException,
-    );
+    await expect(service.create(data)).rejects.toBeInstanceOf(ApiError);
   });
 
   it('should be able to create farmers', async () => {
