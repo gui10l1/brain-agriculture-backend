@@ -12,7 +12,6 @@ async function bootstrap() {
     .setTitle('Farmers Management')
     .setDescription('The farmers API documentation')
     .setVersion('1.0')
-    .addTag('cats')
     .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
