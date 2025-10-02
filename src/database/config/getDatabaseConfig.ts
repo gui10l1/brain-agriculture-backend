@@ -8,12 +8,14 @@ interface IDatabaseConfig {
 }
 
 export default function getDatabaseConfig(): IDatabaseConfig {
-  return {
+  const config = {
     host: process.env.DATABASE_HOST,
     port: Number(process.env.DATABASE_PORT),
     username: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
-    database: process.env.POSTGRES_DATABASE,
+    database: process.env.POSTGRES_DB,
     synchronize: false,
   } as IDatabaseConfig;
+
+  return config;
 }
