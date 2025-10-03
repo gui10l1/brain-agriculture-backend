@@ -26,4 +26,8 @@ export class FarmersService {
 
     return this.farmersRepository.create(data);
   }
+
+  public async list(): Promise<Farmer[]> {
+    return this.farmersRepository.list();
+  }
 }

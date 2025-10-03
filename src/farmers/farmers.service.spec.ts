@@ -43,4 +43,22 @@ describe('FarmersService', () => {
     expect(farmer).toHaveProperty('id');
     expect(farmer.id).toBe(1);
   });
+
+  it('should be able to list all farmers created', async () => {
+    const numberOfFarmers = 5;
+
+    const createdFarmers = await Promise.all(
+      Array.from(Array(numberOfFarmers).keys()).map(async (index) => {
+        return service.create({
+          name: `John Doe`,
+          document: `document-${index}`,
+        });
+      }),
+    );
+
+    const farmers = await service.list();
+
+    expect(JSON.stringify(farmers)).toBe(JSON.stringify(createdFarmers));
+    expect(farmers.length).toBe(numberOfFarmers);
+  });
 });
