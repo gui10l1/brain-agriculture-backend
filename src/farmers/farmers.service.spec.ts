@@ -132,4 +132,27 @@ describe('FarmersService', () => {
       expect(farmer.id).toBe(findFarmer.id);
     });
   });
+
+  describe('Delete Farmers', () => {
+    it('should not be able to delete non-existing farmers', async () => {
+      await expect(
+        service.findById(Math.floor(Math.random() * 10)),
+      ).rejects.toBeInstanceOf(ApiError);
+    });
+
+    it('should be able to delete farmers', async () => {
+      const data = {
+        name: 'John Doe',
+        document: 'document',
+      };
+
+      const farmer = await service.create(data);
+
+      await service.delete(farmer.id);
+
+      const farmers = await service.list();
+
+      expect(farmers.length).toBeFalsy();
+    });
+  });
 });
