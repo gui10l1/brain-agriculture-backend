@@ -111,4 +111,25 @@ describe('FarmersService', () => {
       expect(updatedFarmer.document).toBe('updated-document');
     });
   });
+
+  describe('Find Farmers By Id', () => {
+    it('should not be able to find non-existing farmers', async () => {
+      await expect(
+        service.findById(Math.floor(Math.random() * 10)),
+      ).rejects.toBeInstanceOf(ApiError);
+    });
+
+    it('should be able to find farmers by id', async () => {
+      const data = {
+        name: 'John Doe',
+        document: 'document',
+      };
+
+      const farmer = await service.create(data);
+
+      const findFarmer = await service.findById(farmer.id);
+
+      expect(farmer.id).toBe(findFarmer.id);
+    });
+  });
 });

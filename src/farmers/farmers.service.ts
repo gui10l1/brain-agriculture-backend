@@ -50,4 +50,12 @@ export class FarmersService {
 
     return updatedFarmer;
   }
+
+  public async findById(id: number): Promise<Farmer> {
+    const farmer = await this.farmersRepository.findById(id);
+
+    if (!farmer) throw new ApiError('Agricultor não encontrado!');
+
+    return farmer;
+  }
 }
