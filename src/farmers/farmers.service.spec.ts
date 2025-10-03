@@ -21,44 +21,94 @@ describe('FarmersService', () => {
     service = module.get<FarmersService>(FarmersService);
   });
 
-  it('should not be able to create farmers with same document', async () => {
-    const data = {
-      name: 'John Doe',
-      document: 'same-document',
-    };
+  describe('Create Farmers', () => {
+    it('should not be able to create farmers with same document', async () => {
+      const data = {
+        name: 'John Doe',
+        document: 'same-document',
+      };
 
-    await service.create(data);
+      await service.create(data);
 
-    await expect(service.create(data)).rejects.toBeInstanceOf(ApiError);
+      await expect(service.create(data)).rejects.toBeInstanceOf(ApiError);
+    });
+
+    it('should be able to create farmers', async () => {
+      const data = {
+        name: 'John Doe',
+        document: 'document',
+      };
+
+      const farmer = await service.create(data);
+
+      expect(farmer).toHaveProperty('id');
+      expect(farmer.id).toBe(1);
+    });
   });
 
-  it('should be able to create farmers', async () => {
-    const data = {
-      name: 'John Doe',
-      document: 'document',
-    };
+  describe('List Farmers', () => {
+    it('should be able to list all farmers created', async () => {
+      const numberOfFarmers = 5;
 
-    const farmer = await service.create(data);
+      const createdFarmers = await Promise.all(
+        Array.from(Array(numberOfFarmers).keys()).map(async (index) => {
+          return service.create({
+            name: `John Doe`,
+            document: `document-${index}`,
+          });
+        }),
+      );
 
-    expect(farmer).toHaveProperty('id');
-    expect(farmer.id).toBe(1);
+      const farmers = await service.list();
+
+      expect(JSON.stringify(farmers)).toBe(JSON.stringify(createdFarmers));
+      expect(farmers.length).toBe(numberOfFarmers);
+    });
   });
 
-  it('should be able to list all farmers created', async () => {
-    const numberOfFarmers = 5;
+  describe('Update Farmers', () => {
+    it('should not be able update non-existing farmers', async () => {
+      await expect(
+        service.update(Math.floor(Math.random() * 10), { name: 'John Doe' }),
+      ).rejects.toBeInstanceOf(ApiError);
+    });
 
-    const createdFarmers = await Promise.all(
-      Array.from(Array(numberOfFarmers).keys()).map(async (index) => {
-        return service.create({
-          name: `John Doe`,
-          document: `document-${index}`,
-        });
-      }),
-    );
+    it("should not be able to update farmer's document to an existing one from a different farmer", async () => {
+      const createDataDifferentFarmer = {
+        name: 'John Doe',
+        document: 'document',
+      };
 
-    const farmers = await service.list();
+      await service.create(createDataDifferentFarmer);
 
-    expect(JSON.stringify(farmers)).toBe(JSON.stringify(createdFarmers));
-    expect(farmers.length).toBe(numberOfFarmers);
+      const createData = {
+        name: 'Jenna Doe',
+        document: 'different-document',
+      };
+
+      const farmer = await service.create(createData);
+
+      await expect(
+        service.update(farmer.id, { document: 'document' }),
+      ).rejects.toBeInstanceOf(ApiError);
+    });
+
+    it('should be able to update farmers', async () => {
+      const createData = {
+        name: 'John Doe',
+        document: 'document',
+      };
+
+      const farmer = await service.create(createData);
+
+      const updatedFarmer = await service.update(farmer.id, {
+        document: 'updated-document',
+        name: 'Jenna Doe',
+      });
+
+      expect(farmer.id).toBe(updatedFarmer.id);
+      expect(updatedFarmer.name).toBe('Jenna Doe');
+      expect(updatedFarmer.document).toBe('updated-document');
+    });
   });
 });

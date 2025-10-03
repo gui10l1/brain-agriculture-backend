@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, MaxLength } from 'class-validator';
+import { IsString, IsNotEmpty, MaxLength, IsOptional } from 'class-validator';
 
 export class IFarmerDTO {
   @ApiProperty({
@@ -22,4 +22,29 @@ export class IFarmerDTO {
   @IsNotEmpty()
   @MaxLength(14)
   document: string;
+}
+
+export class UpdateFarmerDTO {
+  @ApiProperty({
+    description: 'Nome completo do agricultor.',
+    example: 'João da Silva',
+    minLength: 1,
+  })
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(150)
+  name?: string;
+
+  @ApiProperty({
+    description: 'Número do CPF/CNPJ ou outro documento de identificação.',
+    example: '123.456.789-00',
+  })
+  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(14)
+  document?: string;
 }

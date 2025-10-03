@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { FARMER_REPOSITORY_PROVIDER_ID } from './constants';
 import type { IFarmersRepository } from './interfaces/repositories.interface';
 import Farmer from './entities/farmer.entity';
-import { IFarmerDTO } from './dtos';
+import { IFarmerDTO, UpdateFarmerDTO } from './dtos';
 import ApiError from 'src/errors/ApiError';
 
 @Injectable()
@@ -29,5 +29,25 @@ export class FarmersService {
 
   public async list(): Promise<Farmer[]> {
     return this.farmersRepository.list();
+  }
+
+  public async update(id: number, data: UpdateFarmerDTO): Promise<Farmer> {
+    const farmer = await this.farmersRepository.findById(id);
+
+    if (!farmer) throw new ApiError('Agricultor não encontrado!');
+
+    if (data.document) {
+      const duplicatedDocument = await this.farmersRepository.findByDocument(
+        data.document,
+      );
+
+      if (duplicatedDocument && duplicatedDocument.id !== farmer.id) {
+        throw new ApiError('Atualização não autorizada!');
+      }
+    }
+
+    const updatedFarmer = await this.farmersRepository.update(farmer, data);
+
+    return updatedFarmer;
   }
 }
