@@ -40,7 +40,7 @@ export default class FakeFarmersRepository implements IFarmersRepository {
   public async delete(farmer: Farmer): Promise<void> {
     const index = this.farmers.findIndex((f) => f.id === farmer.id);
 
-    if (!index) return this.returnPromise();
+    if (index < 0) return this.returnPromise();
 
     this.farmers.splice(index, 1);
 
