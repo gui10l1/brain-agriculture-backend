@@ -70,4 +70,32 @@ describe('FarmersController (e2e)', () => {
       })
       .expect(200);
   });
+
+  it('/farmers/:id (PUT)', async () => {
+    const data = {
+      name: 'John Doe',
+      document: 'document',
+    };
+
+    const createdFarmerResponse = await request(app.getHttpServer())
+      .post('/farmers')
+      .send(data);
+
+    const updateData = {
+      name: 'Jenna Doe',
+      document: 'new-document',
+    };
+
+    return request(app.getHttpServer())
+      .put(`/farmers/${createdFarmerResponse.body.id}`)
+      .send(updateData)
+      .expect((res) => {
+        const responseBody = res.body as Record<string, string | number>;
+
+        expect(responseBody.id).toBe(createdFarmerResponse.body.id);
+        expect(responseBody.name).toBe(updateData.name);
+        expect(responseBody.document).toBe(updateData.document);
+      })
+      .expect(200);
+  });
 });
