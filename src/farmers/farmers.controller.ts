@@ -10,9 +10,16 @@ import {
 import { FarmersService } from './farmers.service';
 import Farmer from './entities/farmer.entity';
 import { IFarmerDTO, UpdateFarmerDTO } from './dtos';
-import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiExtraModels,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+} from '@nestjs/swagger';
 import ApiError from 'src/errors/ApiError';
+import ValidationError from 'src/errors/ValidationError';
 
+@ApiExtraModels(ApiError, ValidationError)
 @Controller('farmers')
 export class FarmersController {
   constructor(private farmersService: FarmersService) {}
@@ -27,7 +34,12 @@ export class FarmersController {
   @ApiResponse({
     status: 400,
     description: 'Houve um erro de validação ou uma regra foi violada',
-    type: ApiError,
+    schema: {
+      oneOf: [
+        { $ref: '#/components/schemas/ApiError' },
+        { $ref: '#/components/schemas/ValidationError' },
+      ],
+    },
   })
   @ApiResponse({
     status: 500,
@@ -52,6 +64,34 @@ export class FarmersController {
   })
   public async list(): Promise<Farmer[]> {
     return this.farmersService.list();
+  }
+
+  @Get('/:id')
+  @ApiOperation({ summary: 'Lista todos os agricultores do sistema' })
+  @ApiResponse({
+    status: 200,
+    description: 'Os agrigultores foram listados.',
+    type: Farmer,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Houve um erro de validação ou uma regra foi violada',
+    schema: {
+      oneOf: [
+        { $ref: '#/components/schemas/ApiError' },
+        { $ref: '#/components/schemas/ValidationError' },
+      ],
+    },
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Erro interno do servidor',
+    type: ApiError,
+  })
+  public async findById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Farmer> {
+    return this.farmersService.findById(id);
   }
 
   @Put('/:id')
