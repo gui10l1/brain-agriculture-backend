@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { FarmersService } from './farmers.service';
 import Farmer from './entities/farmer.entity';
-import { IFarmerDTO } from './dtos';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { IFarmerDTO, UpdateFarmerDTO } from './dtos';
+import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import ApiError from 'src/errors/ApiError';
 
 @Controller('farmers')
@@ -44,5 +44,34 @@ export class FarmersController {
   })
   public async list(): Promise<Farmer[]> {
     return this.farmersService.list();
+  }
+
+  @Put('/:id')
+  @ApiOperation({ summary: 'Atualiza um agricultor específico do sistema' })
+  @ApiResponse({
+    status: 200,
+    description: 'O agrigultor foi atualizado.',
+    type: Farmer,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Houve um erro de validação ou uma regra foi violada',
+    type: ApiError,
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Erro interno do servidor',
+    type: ApiError,
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID do agricultor',
+    type: 'number',
+  })
+  public async update(
+    @Param() id: number,
+    @Body() data: UpdateFarmerDTO,
+  ): Promise<Farmer> {
+    return this.farmersService.update(id, data);
   }
 }

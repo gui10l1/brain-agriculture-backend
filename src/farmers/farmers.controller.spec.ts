@@ -47,4 +47,29 @@ describe('FarmersController', () => {
       expect(spyOnCreateMethod).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('Update Farmers', () => {
+    it('should be called once with defined body and route params', async () => {
+      const id = 1;
+      const data = {
+        name: 'John Doe',
+        document: 'document',
+      };
+
+      jest.spyOn(controller, 'update').mockResolvedValue({
+        id: 1,
+        name: 'Farmer',
+        document: 'Document',
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
+
+      const spyOnUpdateMethod = jest.spyOn(controller, 'update');
+
+      await controller.update(id, data);
+
+      expect(spyOnUpdateMethod).toHaveBeenCalledTimes(1);
+      expect(spyOnUpdateMethod).toHaveBeenCalledWith(id, data);
+    });
+  });
 });
