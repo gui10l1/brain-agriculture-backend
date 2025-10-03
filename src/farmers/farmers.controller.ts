@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -121,5 +122,31 @@ export class FarmersController {
     @Body() data: UpdateFarmerDTO,
   ): Promise<Farmer> {
     return this.farmersService.update(id, data);
+  }
+
+  @Delete('/:id')
+  @ApiOperation({ summary: 'Remove um agricultor do sistema' })
+  @ApiResponse({
+    status: 200,
+    description: 'O agrigultor foi removido.',
+    type: Farmer,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Houve um erro de validação ou uma regra foi violada',
+    schema: {
+      oneOf: [
+        { $ref: '#/components/schemas/ApiError' },
+        { $ref: '#/components/schemas/ValidationError' },
+      ],
+    },
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Erro interno do servidor',
+    type: ApiError,
+  })
+  public async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.farmersService.delete(id);
   }
 }

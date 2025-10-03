@@ -72,4 +72,24 @@ describe('FarmersController', () => {
       expect(spyOnUpdateMethod).toHaveBeenCalledWith(id, data);
     });
   });
+
+  describe('Find Farmers By Id', () => {
+    it('should be able to call service method with defined params', async () => {
+      const id = 1;
+      const spyOnFindByIdMethod = jest.spyOn(controller, 'findById');
+
+      jest.spyOn(controller, 'findById').mockResolvedValue({
+        id: 1,
+        name: 'Farmer',
+        document: 'Document',
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
+
+      await controller.findById(id);
+
+      expect(spyOnFindByIdMethod).toHaveBeenCalledTimes(1);
+      expect(spyOnFindByIdMethod).toHaveBeenCalledWith(id);
+    });
+  });
 });
