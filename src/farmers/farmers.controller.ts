@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { FarmersService } from './farmers.service';
 import Farmer from './entities/farmer.entity';
 import { IFarmerDTO } from './dtos';
@@ -28,5 +28,21 @@ export class FarmersController {
   })
   public async create(@Body() body: IFarmerDTO): Promise<Farmer> {
     return this.farmersService.create(body);
+  }
+
+  @Get('/')
+  @ApiOperation({ summary: 'Lista todos os agricultores do sistema' })
+  @ApiResponse({
+    status: 200,
+    description: 'Os agrigultores foram listados.',
+    type: Farmer,
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Erro interno do servidor',
+    type: ApiError,
+  })
+  public async list(): Promise<Farmer[]> {
+    return this.farmersService.list();
   }
 }

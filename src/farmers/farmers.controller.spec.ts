@@ -22,17 +22,29 @@ describe('FarmersController', () => {
     controller = module.get<FarmersController>(FarmersController);
   });
 
-  it('should be called once with defined body params', async () => {
-    const data = {
-      name: 'John Doe',
-      document: 'document',
-    };
+  describe('Create Farmers', () => {
+    it('should be called once with defined body params', async () => {
+      const data = {
+        name: 'John Doe',
+        document: 'document',
+      };
 
-    const spyOnCreateMethod = jest.spyOn(controller, 'create');
+      const spyOnCreateMethod = jest.spyOn(controller, 'create');
 
-    await controller.create(data);
+      await controller.create(data);
 
-    expect(spyOnCreateMethod).toHaveBeenCalledTimes(1);
-    expect(spyOnCreateMethod).toHaveBeenCalledWith(data);
+      expect(spyOnCreateMethod).toHaveBeenCalledTimes(1);
+      expect(spyOnCreateMethod).toHaveBeenCalledWith(data);
+    });
+  });
+
+  describe('List Farmers', () => {
+    it('should call respective service method', async () => {
+      const spyOnCreateMethod = jest.spyOn(controller, 'list');
+
+      await controller.list();
+
+      expect(spyOnCreateMethod).toHaveBeenCalledTimes(1);
+    });
   });
 });
