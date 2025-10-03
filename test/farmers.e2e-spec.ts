@@ -28,10 +28,6 @@ describe('FarmersController (e2e)', () => {
     await app.init();
   });
 
-  afterEach(async () => {
-    await app.close();
-  });
-
   it('/farmers (POST)', () => {
     const data = {
       name: 'John Doe',
@@ -51,5 +47,27 @@ describe('FarmersController (e2e)', () => {
         expect(responseBody).toHaveProperty('updated_at');
       })
       .expect(201);
+  });
+
+  it('/farmers (GET)', async () => {
+    const data = {
+      name: 'John Doe',
+      document: 'document',
+    };
+
+    const createdFarmerResponse = await request(app.getHttpServer())
+      .post('/farmers')
+      .send(data);
+
+    return request(app.getHttpServer())
+      .get('/farmers')
+      .expect((res) => {
+        const responseBody = res.body as Record<string, string | number>;
+
+        expect(JSON.stringify(responseBody)).toBe(
+          JSON.stringify([createdFarmerResponse.body]),
+        );
+      })
+      .expect(200);
   });
 });
