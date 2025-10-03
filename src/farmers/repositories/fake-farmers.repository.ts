@@ -53,7 +53,7 @@ export default class FakeFarmersRepository implements IFarmersRepository {
   ): Promise<Farmer> {
     const index = this.farmers.findIndex((f) => f.id === farmer.id);
 
-    if (!index) return this.returnPromise();
+    if (index < 0) return this.returnPromise();
 
     const farmerToUpdate = this.farmers[index];
     const updatedFarmer = {
