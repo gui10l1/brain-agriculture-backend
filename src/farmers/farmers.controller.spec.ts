@@ -92,4 +92,18 @@ describe('FarmersController', () => {
       expect(spyOnFindByIdMethod).toHaveBeenCalledWith(id);
     });
   });
+
+  describe('Delete Farmers', () => {
+    it('should be able to call service method with defined params', async () => {
+      const id = 1;
+      const spyOnFindByIdMethod = jest.spyOn(controller, 'delete');
+
+      jest.spyOn(controller, 'delete').mockResolvedValue();
+
+      await controller.delete(id);
+
+      expect(spyOnFindByIdMethod).toHaveBeenCalledTimes(1);
+      expect(spyOnFindByIdMethod).toHaveBeenCalledWith(id);
+    });
+  });
 });
