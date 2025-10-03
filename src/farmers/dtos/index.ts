@@ -29,6 +29,7 @@ export class UpdateFarmerDTO {
     description: 'Nome completo do agricultor.',
     example: 'João da Silva',
     minLength: 1,
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -39,6 +40,7 @@ export class UpdateFarmerDTO {
   @ApiProperty({
     description: 'Número do CPF/CNPJ ou outro documento de identificação.',
     example: '123.456.789-00',
+    required: false,
   })
   @IsOptional()
   @IsNotEmpty()
