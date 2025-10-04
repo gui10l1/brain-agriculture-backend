@@ -55,7 +55,7 @@ export class UpdateCropYieldDTO {
   @IsPositive()
   @Max(9999)
   @Min(1)
-  year?: string;
+  year?: number;
 
   @ApiProperty({
     description: 'Culturas desta safra.',
