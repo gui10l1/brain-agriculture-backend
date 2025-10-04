@@ -55,7 +55,7 @@ export class UpdateCropYieldDTO {
   @IsPositive()
   @Max(9999)
   @Min(1)
-  year: string;
+  year?: string;
 
   @ApiProperty({
     description: 'ID da fazenda no qual esta safra pertence.',
@@ -65,7 +65,7 @@ export class UpdateCropYieldDTO {
   @IsOptional()
   @IsNumber()
   @IsPositive()
-  farmId: number;
+  farmId?: number;
 
   @ApiProperty({
     description: 'Culturas desta safra.',
@@ -76,5 +76,5 @@ export class UpdateCropYieldDTO {
   @IsArray()
   @IsString({ each: true })
   @ArrayMinSize(1)
-  crops: string[];
+  crops?: string[];
 }
