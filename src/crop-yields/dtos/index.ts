@@ -21,7 +21,7 @@ export class CropYieldDTO {
   @IsPositive()
   @Max(9999)
   @Min(1)
-  year: string;
+  year: number;
 
   @ApiProperty({
     description: 'ID da fazenda no qual esta safra pertence.',
