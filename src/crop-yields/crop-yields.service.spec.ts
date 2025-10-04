@@ -5,7 +5,7 @@ import FakeCropYieldsRepository from './repositories/fake-crop-yields.repository
 import { FARM_REPOSITORY_PROVIDER_ID } from 'src/farms/constants';
 import { CROP_YIELD_REPOSITORY_PROVIDER_ID } from './constants';
 import { Provider } from '@nestjs/common';
-import { CropYieldDTO } from './dtos';
+import { CropYieldDTO, UpdateCropYieldDTO } from './dtos';
 import ApiError from 'src/errors/ApiError';
 import { FarmDTO } from 'src/farms/dtos';
 
@@ -109,6 +109,33 @@ describe('CropYieldsService', () => {
 
       expect(farmOneCropYields.length).toBe(3);
       expect(farmTwoCropYields.length).toBe(2);
+    });
+  });
+
+  describe('Update Crop Yields', () => {
+    it('should not able to update non-existing crop yields', async () => {
+      await expect(service.update(123, {})).rejects.toBeInstanceOf(ApiError);
+    });
+
+    it('should be able update crop yields', async () => {
+      const cropYield = await fakeCropYieldsRepository.create({
+        crops: [],
+        farmId: 123,
+        year: 2024,
+      });
+
+      const data: UpdateCropYieldDTO = {
+        crops: ['Milho', 'Soja'],
+        year: 2025,
+      };
+
+      const updatedCropYield = await service.update(cropYield.id, data);
+
+      expect(updatedCropYield.id).toBe(cropYield.id);
+      expect(JSON.stringify(updatedCropYield.crops)).toBe(
+        JSON.stringify(data.crops),
+      );
+      expect(updatedCropYield.year).toBe(data.year);
     });
   });
 });

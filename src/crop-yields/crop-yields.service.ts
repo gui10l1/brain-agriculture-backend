@@ -41,7 +41,14 @@ export class CropYieldsService {
     cropYieldId: number,
     data: UpdateCropYieldDTO,
   ): Promise<CropYield> {
-    // CODE
+    const cropYield = await this.cropYieldsRepository.findById(cropYieldId);
+
+    if (!cropYield) throw new ApiError('Safra não encontrada!');
+
+    return this.cropYieldsRepository.update(cropYield, {
+      crops: data.crops,
+      year: data.year,
+    });
   }
 
   public async delete(cropYieldId: number): Promise<void> {
