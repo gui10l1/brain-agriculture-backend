@@ -37,19 +37,19 @@ export default class Farm {
   @ApiProperty({
     description: 'Area total da fazenda.',
   })
-  @Column('decimal', { precision: 8, scale: 2, nullable: false })
+  @Column('bigint', { nullable: false })
   total_area: number;
 
   @ApiProperty({
     description: 'Area agrícola da fazenda.',
   })
-  @Column('decimal', { precision: 8, scale: 2, nullable: false })
+  @Column('bigint', { nullable: false })
   agricultural_area: number;
 
   @ApiProperty({
     description: 'Area de vegetação da fazenda.',
   })
-  @Column('decimal', { precision: 8, scale: 2, nullable: false })
+  @Column('bigint', { nullable: false })
   vegetation_area: number;
 
   @ApiProperty({ description: 'Data de criação do registro.' })

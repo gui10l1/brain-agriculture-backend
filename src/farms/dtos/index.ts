@@ -51,9 +51,8 @@ export class FarmDTO {
 
   @ApiProperty({
     description: 'Área total da fazenda em hectares',
-    example: 150.75,
+    example: 150,
     type: 'number',
-    format: 'decimal',
   })
   @IsNumber()
   @IsPositive()
@@ -61,9 +60,8 @@ export class FarmDTO {
 
   @ApiProperty({
     description: 'Área destinada à agricultura em hectares',
-    example: 120.5,
+    example: 120,
     type: 'number',
-    format: 'decimal',
   })
   @IsNumber()
   @Min(0)
@@ -71,9 +69,8 @@ export class FarmDTO {
 
   @ApiProperty({
     description: 'Área de vegetação preservada em hectares',
-    example: 30.25,
+    example: 30,
     type: 'number',
-    format: 'decimal',
   })
   @IsNumber()
   @Min(0)
@@ -116,9 +113,8 @@ export class UpdateFarmDTO {
 
   @ApiProperty({
     description: 'Área total da fazenda em hectares',
-    example: 150.75,
+    example: 150,
     type: 'number',
-    format: 'decimal',
     required: false,
   })
   @IsOptional()
@@ -128,9 +124,8 @@ export class UpdateFarmDTO {
 
   @ApiProperty({
     description: 'Área destinada à agricultura em hectares',
-    example: 120.5,
+    example: 120,
     type: 'number',
-    format: 'decimal',
     required: false,
   })
   @IsOptional()
@@ -140,9 +135,8 @@ export class UpdateFarmDTO {
 
   @ApiProperty({
     description: 'Área de vegetação preservada em hectares',
-    example: 30.25,
+    example: 30,
     type: 'number',
-    format: 'decimal',
     required: false,
   })
   @IsOptional()
