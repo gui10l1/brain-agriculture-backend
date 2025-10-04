@@ -78,4 +78,37 @@ describe('CropYieldsService', () => {
       expect(cropYield.year).toBe(data.year);
     });
   });
+
+  describe('List Crop Yields By Farm Id', () => {
+    it('should not be able to list crop yields from a non-existing farm', async () => {
+      await expect(service.listByFarmId(12345)).rejects.toBeInstanceOf(
+        ApiError,
+      );
+    });
+
+    it('should be able to list only farm specific crop yields', async () => {
+      const [farmOne, farmTwo] = await Promise.all([
+        fakeFarmsRepository.create(farmDTO),
+        fakeFarmsRepository.create(farmDTO),
+      ]);
+
+      const totalCropYields = 5;
+
+      await Promise.all(
+        Array.from(Array(totalCropYields).keys()).map(async (key) => {
+          await fakeCropYieldsRepository.create({
+            crops: ['Soja', 'Milho'],
+            farmId: key % 2 === 0 ? farmOne.id : farmTwo.id,
+            year: 2000 + key,
+          });
+        }),
+      );
+
+      const farmOneCropYields = await service.listByFarmId(farmOne.id);
+      const farmTwoCropYields = await service.listByFarmId(farmTwo.id);
+
+      expect(farmOneCropYields.length).toBe(3);
+      expect(farmTwoCropYields.length).toBe(2);
+    });
+  });
 });

@@ -30,7 +30,11 @@ export class CropYieldsService {
   }
 
   public async listByFarmId(farmId: number): Promise<CropYield[]> {
-    // CODE
+    const farm = await this.farmsRepository.findById(farmId);
+
+    if (!farm) throw new ApiError('Fazenda não encontrada!');
+
+    return this.cropYieldsRepository.listByFarmId(farm.id);
   }
 
   public async update(
