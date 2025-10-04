@@ -192,21 +192,50 @@ describe('FarmsService', () => {
 
   describe('Update Farms', () => {
     it('should not be able to update non-existing farms', async () => {
-      await expect(service.delete(12345)).rejects.toBeInstanceOf(ApiError);
+      await expect(service.update(12345, {})).rejects.toBeInstanceOf(ApiError);
     });
 
-    it('should not be able to update farms when total area is minor than agricultural and vegetation areas combined', async () => {
+    it('should not be able to update farms when PROVIDED total area is minor than agricultural and vegetation areas combined', async () => {
       const data: FarmDTO = {
         agriculturalArea: 10 * HEC_IN_METERS,
-        vegetationArea: 15 * HEC_IN_METERS,
+        vegetationArea: 10 * HEC_IN_METERS,
         totalArea: 20 * HEC_IN_METERS,
         city: 'City',
         farmerId: 1,
         name: 'Farm',
         state: 'ST',
       };
+      const farmer = await farmsRepository.create(data);
 
-      await expect(service.create(data)).rejects.toBeInstanceOf(ApiError);
+      data.agriculturalArea = 15 * HEC_IN_METERS;
+      data.vegetationArea = 15 * HEC_IN_METERS;
+      data.totalArea = 25 * HEC_IN_METERS;
+
+      await expect(service.update(farmer.id, data)).rejects.toBeInstanceOf(
+        ApiError,
+      );
+    });
+
+    it('should not be able to update farms when total area is minor than agricultural and vegetation areas combined', async () => {
+      const data: FarmDTO = {
+        agriculturalArea: 10 * HEC_IN_METERS,
+        vegetationArea: 10 * HEC_IN_METERS,
+        totalArea: 20 * HEC_IN_METERS,
+        city: 'City',
+        farmerId: 1,
+        name: 'Farm',
+        state: 'ST',
+      };
+      const farmer = await farmsRepository.create(data);
+
+      data.agriculturalArea = 15 * HEC_IN_METERS;
+      data.vegetationArea = 15 * HEC_IN_METERS;
+
+      data.totalArea = 0;
+
+      await expect(service.update(farmer.id, data)).rejects.toBeInstanceOf(
+        ApiError,
+      );
     });
 
     it('should be able to update farms', async () => {
@@ -231,6 +260,12 @@ describe('FarmsService', () => {
       });
 
       const farm = await service.update(createdFarm.id, data);
+
+      await service.update(createdFarm.id, {
+        city: 'Updated City',
+        name: 'Updated Farm',
+        state: 'UT',
+      });
 
       expect(farm.id).toBe(id);
       expect(farm.name).toBe(data.name);
