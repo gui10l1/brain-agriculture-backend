@@ -58,7 +58,7 @@ export default class Farm {
 
   @ManyToOne(() => Farmer)
   @JoinColumn({ name: 'farmer_id' })
-  farmers: Farmer[];
+  farmers: Farmer;
 
   @ApiProperty({ description: 'Data de criação do registro.' })
   @CreateDateColumn()
