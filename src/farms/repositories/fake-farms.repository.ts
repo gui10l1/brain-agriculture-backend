@@ -2,7 +2,7 @@ import { FarmDTO } from '../dtos';
 import Farm from '../entities/farm.entity';
 import { IFarmsRepository } from '../interfaces/repositories.interface';
 
-export default class FakeFarmersRepository implements IFarmsRepository {
+export default class FakeFarmsRepository implements IFarmsRepository {
   private farms: Farm[] = [];
 
   private returnPromise<T>(type?: T): Promise<T> {
