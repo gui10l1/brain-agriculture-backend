@@ -7,6 +7,7 @@ import { FARMER_REPOSITORY_PROVIDER_ID } from 'src/farmers/constants';
 import { FARM_REPOSITORY_PROVIDER_ID, HEC_IN_METERS } from './constants';
 import FakeFarmsRepository from './repositories/fake-farms.repository';
 import FakeFarmersRepository from 'src/farmers/repositories/fake-farmers.repository';
+import { mockedFarmer } from '../../mocks/farmers';
 
 describe('FarmsService', () => {
   let service: FarmsService;
@@ -80,13 +81,7 @@ describe('FarmsService', () => {
         state: 'ST',
       };
 
-      jest.spyOn(farmersRepository, 'findById').mockResolvedValue({
-        id: 1,
-        created_at: new Date(),
-        document: 'document',
-        name: 'John Doe',
-        updated_at: new Date(),
-      });
+      jest.spyOn(farmersRepository, 'findById').mockResolvedValue(mockedFarmer);
 
       const farm = await service.create(data);
 

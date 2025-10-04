@@ -7,6 +7,7 @@ import { FARMER_REPOSITORY_PROVIDER_ID } from 'src/farmers/constants';
 import FakeFarmersRepository from 'src/farmers/repositories/fake-farmers.repository';
 import FakeFarmsRepository from './repositories/fake-farms.repository';
 import { Provider } from '@nestjs/common';
+import { mockedFarmer } from '../../mocks/farmers';
 
 describe('FarmsController', () => {
   let controller: FarmsController;
@@ -51,13 +52,9 @@ describe('FarmsController', () => {
 
       const spyOn = jest.spyOn(service, 'create');
 
-      jest.spyOn(fakeFarmersRepository, 'findById').mockResolvedValue({
-        id: 1,
-        created_at: new Date(),
-        document: 'document',
-        name: 'name',
-        updated_at: new Date(),
-      });
+      jest
+        .spyOn(fakeFarmersRepository, 'findById')
+        .mockResolvedValue(mockedFarmer);
 
       await controller.create(data);
 
