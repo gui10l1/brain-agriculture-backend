@@ -7,7 +7,6 @@ import { FARMER_REPOSITORY_PROVIDER_ID } from 'src/farmers/constants';
 import { FARM_REPOSITORY_PROVIDER_ID, HEC_IN_METERS } from './constants';
 import FakeFarmsRepository from './repositories/fake-farms.repository';
 import FakeFarmersRepository from 'src/farmers/repositories/fake-farmers.repository';
-import { mockedFarmer } from '../../mocks/farmers';
 
 describe('FarmsService', () => {
   let service: FarmsService;
@@ -75,17 +74,20 @@ describe('FarmsService', () => {
     });
 
     it('should be able to create farms', async () => {
+      const farmer = await farmersRepository.create({
+        document: 'Document',
+        name: 'John Doe',
+      });
+
       const data: FarmDTO = {
         agriculturalArea: 10 * HEC_IN_METERS,
         vegetationArea: 10 * HEC_IN_METERS,
         totalArea: 20 * HEC_IN_METERS,
         city: 'City',
-        farmerId: 1,
+        farmerId: farmer.id,
         name: 'Farm',
         state: 'ST',
       };
-
-      jest.spyOn(farmersRepository, 'findById').mockResolvedValue(mockedFarmer);
 
       const farm = await service.create(data);
 
@@ -111,12 +113,22 @@ describe('FarmsService', () => {
     });
 
     it("should be able to list all farmer's farms", async () => {
-      const farmerId = 1;
+      const [farmer, anotherFarmer] = await Promise.all([
+        farmersRepository.create({
+          document: 'Document',
+          name: 'John Doe',
+        }),
+        farmersRepository.create({
+          document: 'Document2',
+          name: 'Jenna Doe',
+        }),
+      ]);
+
       const mockFarms = [
         {
           agriculturalArea: 50,
           city: 'City',
-          farmerId: farmerId,
+          farmerId: farmer.id,
           name: 'Farm',
           state: 'ST',
           totalArea: 100,
@@ -125,7 +137,7 @@ describe('FarmsService', () => {
         {
           agriculturalArea: 50,
           city: 'City',
-          farmerId: farmerId,
+          farmerId: farmer.id,
           name: 'Farm',
           state: 'ST',
           totalArea: 100,
@@ -134,7 +146,7 @@ describe('FarmsService', () => {
         {
           agriculturalArea: 50,
           city: 'City',
-          farmerId: 2,
+          farmerId: anotherFarmer.id,
           name: 'Farm',
           state: 'ST',
           totalArea: 100,
@@ -143,14 +155,10 @@ describe('FarmsService', () => {
       ];
 
       await Promise.all(
-        mockFarms.map(async (farm) => {
-          await farmsRepository.create(farm);
-        }),
+        mockFarms.map(async (dto) => farmsRepository.create(dto)),
       );
 
-      jest.spyOn(farmersRepository, 'findById').mockResolvedValue(mockedFarmer);
-
-      const list = await service.listByFarmerId(farmerId);
+      const list = await service.listByFarmerId(farmer.id);
 
       expect(list.length).toBe(2);
     });

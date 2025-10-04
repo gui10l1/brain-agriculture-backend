@@ -7,7 +7,6 @@ import { FARMER_REPOSITORY_PROVIDER_ID } from 'src/farmers/constants';
 import FakeFarmersRepository from 'src/farmers/repositories/fake-farmers.repository';
 import FakeFarmsRepository from './repositories/fake-farms.repository';
 import { Provider } from '@nestjs/common';
-import { mockedFarmer } from '../../mocks/farmers';
 
 describe('FarmsController', () => {
   let controller: FarmsController;
@@ -44,21 +43,22 @@ describe('FarmsController', () => {
 
   describe('Create Farms', () => {
     it('should be able to call service method with expected params', async () => {
+      const spyOn = jest.spyOn(service, 'create');
+
+      const farmer = await fakeFarmersRepository.create({
+        document: 'Document',
+        name: 'John Doe',
+      });
+
       const data: FarmDTO = {
         agriculturalArea: 10 * HEC_IN_METERS,
         vegetationArea: 10 * HEC_IN_METERS,
         totalArea: 20 * HEC_IN_METERS,
         city: 'City',
-        farmerId: 1,
+        farmerId: farmer.id,
         name: 'Farm',
         state: 'ST',
       };
-
-      const spyOn = jest.spyOn(service, 'create');
-
-      jest
-        .spyOn(fakeFarmersRepository, 'findById')
-        .mockResolvedValue(mockedFarmer);
 
       await controller.create(data);
 
@@ -69,12 +69,13 @@ describe('FarmsController', () => {
 
   describe('List Farms By Farmer Id', () => {
     it('should be able to call service method with expected params', async () => {
-      const spyOn = jest.spyOn(service, 'listByFarmerId');
-      const id = 1;
+      const farmer = await fakeFarmersRepository.create({
+        document: 'Document',
+        name: 'John Doe',
+      });
 
-      jest
-        .spyOn(fakeFarmersRepository, 'findById')
-        .mockResolvedValue(mockedFarmer);
+      const spyOn = jest.spyOn(service, 'listByFarmerId');
+      const id = farmer.id;
 
       await controller.listByFarmerId(id);
 
