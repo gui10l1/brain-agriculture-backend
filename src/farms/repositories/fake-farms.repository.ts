@@ -1,3 +1,4 @@
+import Farmer from 'src/farmers/entities/farmer.entity';
 import { FarmDTO } from '../dtos';
 import Farm from '../entities/farm.entity';
 import { IFarmsRepository } from '../interfaces/repositories.interface';
@@ -20,7 +21,7 @@ export default class FakeFarmsRepository implements IFarmsRepository {
       state: data.state,
       total_area: data.totalArea,
       vegetation_area: data.vegetationArea,
-      farmers: [],
+      farmer: new Farmer(),
       created_at: new Date(),
       updated_at: new Date(),
     };
@@ -61,7 +62,7 @@ export default class FakeFarmsRepository implements IFarmsRepository {
       state: data.state || farm.state,
       total_area: data.totalArea || farm.total_area,
       vegetation_area: data.vegetationArea || farm.vegetation_area,
-      farmers: [],
+      farmer: new Farmer(),
       created_at: farmerToUpdate.created_at,
       updated_at: new Date(),
     };
