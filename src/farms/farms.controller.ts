@@ -9,11 +9,10 @@ import {
   Put,
 } from '@nestjs/common';
 import Farm from './entities/farm.entity';
-import { FarmDTO } from './dtos';
+import { FarmDTO, UpdateFarmDTO } from './dtos';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import ApiError from 'src/errors/ApiError';
 import { FarmsService } from './farms.service';
-import { UpdateFarmerDTO } from 'src/farmers/dtos';
 
 @Controller('farms')
 export class FarmsController {
@@ -93,7 +92,7 @@ export class FarmsController {
   })
   public async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() data: UpdateFarmerDTO,
+    @Body() data: UpdateFarmDTO,
   ): Promise<Farm> {
     return this.farmsService.update(id, data);
   }
@@ -103,7 +102,6 @@ export class FarmsController {
   @ApiResponse({
     status: 200,
     description: 'A fazenda foi removida.',
-    type: Farm,
   })
   @ApiResponse({
     status: 400,

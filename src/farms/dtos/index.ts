@@ -50,7 +50,7 @@ export class FarmDTO {
   state: string;
 
   @ApiProperty({
-    description: 'Área total da fazenda em hectares',
+    description: 'Área total da fazenda em metros quadrados',
     example: 150,
     type: 'number',
   })
@@ -59,7 +59,7 @@ export class FarmDTO {
   totalArea: number;
 
   @ApiProperty({
-    description: 'Área destinada à agricultura em hectares',
+    description: 'Área destinada à agricultura em metros quadrados',
     example: 120,
     type: 'number',
   })
@@ -68,7 +68,7 @@ export class FarmDTO {
   agriculturalArea: number;
 
   @ApiProperty({
-    description: 'Área de vegetação preservada em hectares',
+    description: 'Área de vegetação preservada em metros quadrados',
     example: 30,
     type: 'number',
   })
@@ -80,7 +80,7 @@ export class FarmDTO {
 export class UpdateFarmDTO {
   @ApiProperty({
     description: 'Nome da fazenda',
-    example: 'Fazenda Boa Esperança',
+    example: 'Fazenda Atualizado Boa Esperança',
     maxLength: 255,
     required: false,
   })
@@ -91,7 +91,7 @@ export class UpdateFarmDTO {
 
   @ApiProperty({
     description: 'Cidade onde a fazenda está localizada',
-    example: 'Uberlândia',
+    example: 'Uberlândia Atualizado',
     maxLength: 150,
     required: false,
   })
@@ -102,7 +102,7 @@ export class UpdateFarmDTO {
 
   @ApiProperty({
     description: 'Estado (UF) da fazenda',
-    example: 'MG',
+    example: 'MG Atualizado',
     maxLength: 2,
     required: false,
   })
@@ -112,8 +112,8 @@ export class UpdateFarmDTO {
   state?: string;
 
   @ApiProperty({
-    description: 'Área total da fazenda em hectares',
-    example: 150,
+    description: 'Área total da fazenda em metros quadrados',
+    example: 200,
     type: 'number',
     required: false,
   })
@@ -123,8 +123,8 @@ export class UpdateFarmDTO {
   totalArea?: number;
 
   @ApiProperty({
-    description: 'Área destinada à agricultura em hectares',
-    example: 120,
+    description: 'Área destinada à agricultura em metros quadrados',
+    example: 100,
     type: 'number',
     required: false,
   })
@@ -134,8 +134,8 @@ export class UpdateFarmDTO {
   agriculturalArea?: number;
 
   @ApiProperty({
-    description: 'Área de vegetação preservada em hectares',
-    example: 30,
+    description: 'Área de vegetação preservada em metros quadrados',
+    example: 100,
     type: 'number',
     required: false,
   })
