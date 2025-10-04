@@ -5,6 +5,7 @@ interface IDatabaseConfig {
   password: string;
   database: string;
   synchronize: boolean;
+  entities: string[];
 }
 
 export default function getDatabaseConfig(): IDatabaseConfig {
@@ -15,6 +16,7 @@ export default function getDatabaseConfig(): IDatabaseConfig {
     password: process.env.POSTGRES_PASSWORD,
     database: process.env.POSTGRES_DB,
     synchronize: false,
+    entities: [`dist/**/entities/*.entity.{js,ts}`],
   } as IDatabaseConfig;
 
   return config;
