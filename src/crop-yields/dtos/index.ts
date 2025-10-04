@@ -58,16 +58,6 @@ export class UpdateCropYieldDTO {
   year?: string;
 
   @ApiProperty({
-    description: 'ID da fazenda no qual esta safra pertence.',
-    example: 1,
-    type: 'number',
-  })
-  @IsOptional()
-  @IsNumber()
-  @IsPositive()
-  farmId?: number;
-
-  @ApiProperty({
     description: 'Culturas desta safra.',
     example: ['Soja', 'Cenoura', 'Trigo'],
     isArray: true,
