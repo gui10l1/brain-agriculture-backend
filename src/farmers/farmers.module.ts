@@ -6,6 +6,7 @@ import { FarmersController } from './farmers.controller';
 
 @Module({
   providers: [...repositoriesProviders, FarmersService],
+  exports: [...repositoriesProviders],
   imports: [DatabaseModule],
   controllers: [FarmersController],
 })

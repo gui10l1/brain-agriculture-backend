@@ -2,11 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request, { Response } from 'supertest';
 import { App } from 'supertest/types';
-import { AppModule } from './../src/app.module';
 import { FARMER_REPOSITORY_PROVIDER_ID } from 'src/farmers/constants';
 import FakeFarmersRepository from 'src/farmers/repositories/fake-farmers.repository';
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from 'src/database/database.module';
+import { FarmersModule } from 'src/farmers/farmers.module';
 
 @Module({})
 export class EmptyModule {}
@@ -16,7 +16,7 @@ describe('FarmersController (e2e)', () => {
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [FarmersModule],
     })
       .overrideModule(DatabaseModule)
       .useModule(EmptyModule)
