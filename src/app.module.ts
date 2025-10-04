@@ -4,9 +4,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
 import { FarmersModule } from './farmers/farmers.module';
+import { FarmsModule } from './farms/farms.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), DatabaseModule, FarmersModule],
+  imports: [ConfigModule.forRoot(), DatabaseModule, FarmersModule, FarmsModule],
   controllers: [AppController],
   providers: [AppService],
 })
