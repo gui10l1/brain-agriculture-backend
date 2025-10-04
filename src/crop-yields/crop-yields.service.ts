@@ -52,6 +52,10 @@ export class CropYieldsService {
   }
 
   public async delete(cropYieldId: number): Promise<void> {
-    // CODE
+    const cropYield = await this.cropYieldsRepository.findById(cropYieldId);
+
+    if (!cropYield) throw new ApiError('Safra não encontrada!');
+
+    await this.cropYieldsRepository.delete(cropYield);
   }
 }

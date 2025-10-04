@@ -138,4 +138,24 @@ describe('CropYieldsService', () => {
       expect(updatedCropYield.year).toBe(data.year);
     });
   });
+
+  describe('Delete Crop Yields', () => {
+    it('should not able to delete non-existing crop yields', async () => {
+      await expect(service.delete(123)).rejects.toBeInstanceOf(ApiError);
+    });
+
+    it('should not able to delete crop yields', async () => {
+      const cropYield = await fakeCropYieldsRepository.create({
+        crops: [],
+        farmId: 1,
+        year: 2025,
+      });
+
+      const spyOnDeleteMethod = jest.spyOn(fakeCropYieldsRepository, 'delete');
+
+      await service.delete(cropYield.id);
+
+      expect(spyOnDeleteMethod).toHaveBeenCalledWith(cropYield);
+    });
+  });
 });
