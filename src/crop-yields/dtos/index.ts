@@ -49,6 +49,7 @@ export class UpdateCropYieldDTO {
     example: 2021,
     maximum: 9999,
     minimum: 1,
+    required: false,
   })
   @IsOptional()
   @IsNumber()
@@ -61,6 +62,7 @@ export class UpdateCropYieldDTO {
     description: 'Culturas desta safra.',
     example: ['Soja', 'Cenoura', 'Trigo'],
     isArray: true,
+    required: false,
   })
   @IsOptional()
   @IsArray()
