@@ -6,7 +6,7 @@ export interface IFarmsRepository {
 
   findById(id: number): Promise<Farm | null>;
 
-  list(): Promise<Farm[]>;
+  listByFarmerId(farmerId: number): Promise<Farm[]>;
 
   update(farmer: Farm, data: Partial<FarmDTO>): Promise<Farm>;
 

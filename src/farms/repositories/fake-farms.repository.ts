@@ -69,7 +69,9 @@ export default class FakeFarmsRepository implements IFarmsRepository {
     return this.returnPromise(updatedFarm);
   }
 
-  public async list(): Promise<Farm[]> {
-    return this.returnPromise(this.farms);
+  public async listByFarmerId(farmerId: number): Promise<Farm[]> {
+    const list = this.farms.filter((item) => item.farmer_id === farmerId);
+
+    return this.returnPromise(list);
   }
 }

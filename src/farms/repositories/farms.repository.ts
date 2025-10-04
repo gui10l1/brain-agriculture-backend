@@ -30,8 +30,8 @@ export default class FarmsRepository implements IFarmsRepository {
     return this.ormRepository.findOne({ where: { id } });
   }
 
-  public async list(): Promise<Farm[]> {
-    return this.ormRepository.find();
+  public async listByFarmerId(farmerId: number): Promise<Farm[]> {
+    return this.ormRepository.find({ where: { farmer_id: farmerId } });
   }
 
   public async update(farm: Farm, data: Partial<FarmDTO>): Promise<Farm> {
