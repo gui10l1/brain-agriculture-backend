@@ -24,7 +24,7 @@ export default class CropYield {
 
   @ApiProperty({ description: 'Ano da safra.' })
   @Column('int', { nullable: false })
-  year: string;
+  year: number;
 
   @ApiProperty({
     description: 'Culturas desta safra.',
