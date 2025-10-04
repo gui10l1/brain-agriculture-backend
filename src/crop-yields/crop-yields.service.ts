@@ -5,6 +5,7 @@ import CropYield from './entities/crop-yield.entity';
 import { CropYieldDTO, UpdateCropYieldDTO } from './dtos';
 import { FARM_REPOSITORY_PROVIDER_ID } from 'src/farms/constants';
 import type { IFarmsRepository } from 'src/farms/interfaces/repositories.interface';
+import ApiError from 'src/errors/ApiError';
 
 @Injectable()
 export class CropYieldsService {
@@ -17,7 +18,15 @@ export class CropYieldsService {
   ) {}
 
   public async create(data: CropYieldDTO): Promise<CropYield> {
-    // CODE
+    const farm = await this.farmsRepository.findById(data.farmId);
+
+    if (!farm) {
+      throw new ApiError(
+        'Não é possível associar safras a uma fazenda que não existe!',
+      );
+    }
+
+    return this.cropYieldsRepository.create(data);
   }
 
   public async listByFarmId(farmId: number): Promise<CropYield[]> {
