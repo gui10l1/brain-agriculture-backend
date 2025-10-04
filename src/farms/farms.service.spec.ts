@@ -4,11 +4,9 @@ import { FarmDTO } from './dtos';
 import ApiError from 'src/errors/ApiError';
 import { Provider } from '@nestjs/common';
 import { FARMER_REPOSITORY_PROVIDER_ID } from 'src/farmers/constants';
-import { FARM_REPOSITORY_PROVIDER_ID } from './constants';
+import { FARM_REPOSITORY_PROVIDER_ID, HEC_IN_METERS } from './constants';
 import FakeFarmsRepository from './repositories/fake-farms.repository';
 import FakeFarmersRepository from 'src/farmers/repositories/fake-farmers.repository';
-
-const HEC_IN_METERS = 10000;
 
 describe('FarmsService', () => {
   let service: FarmsService;
