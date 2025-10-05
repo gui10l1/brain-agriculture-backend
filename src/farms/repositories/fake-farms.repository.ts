@@ -1,7 +1,11 @@
 import Farmer from 'src/farmers/entities/farmer.entity';
 import { FarmDTO } from '../dtos';
 import Farm from '../entities/farm.entity';
-import { IFarmsRepository } from '../interfaces/repositories.interface';
+import {
+  IAreaByState,
+  IAreaUsage,
+  IFarmsRepository,
+} from '../interfaces/repositories.interface';
 
 export default class FakeFarmsRepository implements IFarmsRepository {
   private farms: Farm[] = [];
@@ -76,5 +80,49 @@ export default class FakeFarmsRepository implements IFarmsRepository {
     const list = this.farms.filter((item) => item.farmer_id === farmerId);
 
     return this.returnPromise(list);
+  }
+
+  public async countAll(): Promise<number> {
+    return this.returnPromise(this.farms.length);
+  }
+
+  public async countAllAreaUsage(): Promise<IAreaUsage> {
+    const vegetation = this.farms.reduce(
+      (acc, cur) => (acc += cur.vegetation_area),
+      0,
+    );
+    const agricultural = this.farms.reduce(
+      (acc, cur) => (acc += cur.agricultural_area),
+      0,
+    );
+
+    return this.returnPromise({
+      vegetation,
+      agricultural,
+    });
+  }
+
+  public async countAllTotalArea(): Promise<number> {
+    const total = this.farms.reduce((acc, cur) => (acc += cur.total_area), 0);
+
+    return this.returnPromise(total);
+  }
+
+  public async countAreaByState(): Promise<Array<IAreaByState>> {
+    const states = this.farms.reduce<string[]>((acc, cur) => {
+      const isIncluded = acc.some((item) => item === cur.state);
+
+      if (!isIncluded) acc.push(cur.state);
+
+      return acc;
+    }, []);
+
+    const total = states.map<IAreaByState>((state) => {
+      const sum = this.farms.filter((farm) => farm.state === state).length;
+
+      return { state, count: sum };
+    });
+
+    return this.returnPromise(total);
   }
 }
