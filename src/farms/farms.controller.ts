@@ -126,4 +126,37 @@ export class FarmsController {
   public async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.farmsService.delete(id);
   }
+
+  @Get('/count')
+  public async count(): Promise<{ total: number }> {
+    const response = await this.farmsService.count();
+
+    return { total: response.count };
+  }
+
+  @Get('/state-summary')
+  public async countByState(): Promise<
+    Array<{ state: string; count: number }>
+  > {
+    const response = await this.farmsService.countFarmsByState();
+
+    return response;
+  }
+
+  @Get('/total-area')
+  public async getTotalArea(): Promise<{ area: number }> {
+    const response = await this.farmsService.sumFarmsArea();
+
+    return { area: response.total };
+  }
+
+  @Get('/area-summary')
+  public async getAreaSummary(): Promise<{
+    agricultural: number;
+    vegetation: number;
+  }> {
+    const response = await this.farmsService.countGroundUsage();
+
+    return response;
+  }
 }

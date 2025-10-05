@@ -137,4 +137,44 @@ describe('FarmsController', () => {
       expect(spyOn).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('Count Farms', () => {
+    it('should be able to call service method with expected params', async () => {
+      const spyOnMethod = jest.spyOn(service, 'count');
+
+      await controller.count();
+
+      expect(spyOnMethod).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Count Farms By State', () => {
+    it('should be able to call service method with expected params', async () => {
+      const spyOnMethod = jest.spyOn(service, 'countFarmsByState');
+
+      await controller.countByState();
+
+      expect(spyOnMethod).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Count Total Area of All Farms', () => {
+    it('should be able to call service method with expected params', async () => {
+      const spyOnMethod = jest.spyOn(service, 'sumFarmsArea');
+
+      await controller.getTotalArea();
+
+      expect(spyOnMethod).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Count Total Area By Usage', () => {
+    it('should be able to call service method with expected params', async () => {
+      const spyOnMethod = jest.spyOn(service, 'countGroundUsage');
+
+      await controller.getAreaSummary();
+
+      expect(spyOnMethod).toHaveBeenCalledTimes(1);
+    });
+  });
 });
