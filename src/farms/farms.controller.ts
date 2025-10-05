@@ -44,7 +44,7 @@ export class FarmsController {
     return this.farmsService.create(data);
   }
 
-  @Get('/:farmerId')
+  @Get('/farmers/:farmerId')
   @ApiOperation({ summary: 'Listar todas as fazendas de um agricultor.' })
   @ApiResponse({
     status: 200,
