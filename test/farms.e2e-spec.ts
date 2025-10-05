@@ -85,7 +85,7 @@ describe('FarmsController (e2e)', () => {
       .expect(201);
   });
 
-  it('/farms/:farmerId (GET)', async () => {
+  it('/farms/farmers/:farmerId (GET)', async () => {
     const farmer = await fakeFarmersRepository.create({
       document: 'Document',
       name: 'Name',
@@ -100,7 +100,7 @@ describe('FarmsController (e2e)', () => {
     ]);
 
     return request(app.getHttpServer())
-      .get(`/farms/${farmer.id}`)
+      .get(`/farms/farmers/${farmer.id}`)
       .expect((res) => {
         const responseBody = res.body as Record<string, string | number>;
 
@@ -153,5 +153,146 @@ describe('FarmsController (e2e)', () => {
     });
 
     return request(app.getHttpServer()).delete(`/farms/${farm.id}`).expect(200);
+  });
+
+  it('/farms/count (GET)', async () => {
+    const totalFarms = Math.floor(Math.random() * 5);
+
+    await Promise.all(
+      Array.from(Array(totalFarms).keys()).map(async () => {
+        await fakeFarmsRepository.create({
+          ...farmsDTO,
+          farmerId: 1,
+        });
+      }),
+    );
+
+    return request(app.getHttpServer())
+      .get(`/farms/count`)
+      .expect((req) => {
+        const responseBody = req.body as { total: number };
+
+        expect(responseBody.total).toBe(totalFarms);
+      })
+      .expect(200);
+  });
+
+  it('/farms/count (GET)', async () => {
+    const totalFarms = Math.floor(Math.random() * 5);
+
+    await Promise.all(
+      Array.from(Array(totalFarms).keys()).map(async () => {
+        await fakeFarmsRepository.create({
+          ...farmsDTO,
+          farmerId: 1,
+        });
+      }),
+    );
+
+    return request(app.getHttpServer())
+      .get(`/farms/count`)
+      .expect((req) => {
+        const responseBody = req.body as { total: number };
+
+        expect(responseBody.total).toBe(totalFarms);
+      })
+      .expect(200);
+  });
+
+  it('/farms/state-summary (GET)', async () => {
+    await fakeFarmsRepository.create({
+      ...farmsDTO,
+      state: `ST`,
+      farmerId: 1,
+    });
+    await fakeFarmsRepository.create({
+      ...farmsDTO,
+      state: `ST`,
+      farmerId: 1,
+    });
+    await fakeFarmsRepository.create({
+      ...farmsDTO,
+      state: `TS`,
+      farmerId: 1,
+    });
+
+    return request(app.getHttpServer())
+      .get(`/farms/state-summary`)
+      .expect((req) => {
+        const expectedResponse = [
+          { state: 'ST', count: 2 },
+          { state: 'TS', count: 1 },
+        ];
+
+        expect(req.body).toEqual(expectedResponse);
+      })
+      .expect(200);
+  });
+
+  it('/farms/total-area (GET)', async () => {
+    await fakeFarmsRepository.create({
+      ...farmsDTO,
+      totalArea: 10,
+      state: `ST`,
+      farmerId: 1,
+    });
+    await fakeFarmsRepository.create({
+      ...farmsDTO,
+      totalArea: 5,
+      state: `ST`,
+      farmerId: 1,
+    });
+    await fakeFarmsRepository.create({
+      ...farmsDTO,
+      totalArea: 100,
+      state: `TS`,
+      farmerId: 1,
+    });
+
+    return request(app.getHttpServer())
+      .get(`/farms/total-area`)
+      .expect((req) => {
+        const responseBody = req.body as { area: number };
+
+        expect(responseBody.area).toEqual(115);
+      })
+      .expect(200);
+  });
+
+  it('/farms/area-summary (GET)', async () => {
+    await fakeFarmsRepository.create({
+      ...farmsDTO,
+      vegetationArea: 10,
+      agriculturalArea: 5,
+      state: `ST`,
+      farmerId: 1,
+    });
+    await fakeFarmsRepository.create({
+      ...farmsDTO,
+      vegetationArea: 10,
+      agriculturalArea: 5,
+      state: `ST`,
+      farmerId: 1,
+    });
+    await fakeFarmsRepository.create({
+      ...farmsDTO,
+      vegetationArea: 1,
+      agriculturalArea: 2,
+      state: `TS`,
+      farmerId: 1,
+    });
+
+    return request(app.getHttpServer())
+      .get(`/farms/area-summary`)
+      .expect((req) => {
+        const responseBody = req.body as {
+          agricultural: number;
+          vegetation: number;
+        };
+
+        expect(responseBody.agricultural).toEqual(12);
+        expect(responseBody.vegetation).toEqual(21);
+      })
+      .expect(200);
   });
 });
