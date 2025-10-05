@@ -9,5 +9,6 @@ import { FarmersModule } from 'src/farmers/farmers.module';
   providers: [...repositoriesProviders, FarmsService],
   imports: [DatabaseModule, FarmersModule],
   controllers: [FarmsController],
+  exports: [...repositoriesProviders],
 })
 export class FarmsModule {}
