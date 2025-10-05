@@ -70,4 +70,33 @@ export class FarmsService {
 
     await this.farmsRepository.delete(farm);
   }
+
+  public async count(): Promise<{ count: number }> {
+    const count = await this.farmsRepository.countAll();
+
+    return { count };
+  }
+
+  public async sumFarmsArea(): Promise<{ total: number }> {
+    const totalArea = await this.farmsRepository.countAllTotalArea();
+
+    return { total: totalArea };
+  }
+
+  public async countFarmsByState(): Promise<
+    Array<{ state: string; count: number }>
+  > {
+    const total = await this.farmsRepository.countAreaByState();
+
+    return total;
+  }
+
+  public async countGroundUsage(): Promise<{
+    agricultural: number;
+    vegetation: number;
+  }> {
+    const response = await this.farmsRepository.countAllAreaUsage();
+
+    return response;
+  }
 }

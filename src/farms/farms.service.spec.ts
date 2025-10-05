@@ -276,4 +276,125 @@ describe('FarmsService', () => {
       expect(farm.state).toBe(data.state);
     });
   });
+
+  describe('Farms Statistics', () => {
+    it('should be able to count all farms registered', async () => {
+      const totalFarms = Math.floor(Math.random() * 10);
+
+      await Promise.all(
+        Array.from(Array(totalFarms).keys()).map(
+          async () =>
+            await farmsRepository.create({
+              agriculturalArea: 10 * HEC_IN_METERS,
+              vegetationArea: 15 * HEC_IN_METERS,
+              totalArea: 20 * HEC_IN_METERS,
+              city: 'City',
+              farmerId: 1,
+              name: 'Farm',
+              state: 'ST',
+            }),
+        ),
+      );
+
+      const response = await service.count();
+
+      expect(response.count).toBe(totalFarms);
+    });
+
+    it('should be able to sum total area of all farms registered', async () => {
+      const totalFarms = Math.floor(Math.random() * 10);
+      let totalArea = 0;
+
+      await Promise.all(
+        Array.from(Array(totalFarms).keys()).map(async () => {
+          const randomTotalArea = Math.floor(Math.random() * 100);
+          const farm = await farmsRepository.create({
+            agriculturalArea: 10 * HEC_IN_METERS,
+            vegetationArea: 10 * HEC_IN_METERS,
+            totalArea: randomTotalArea * HEC_IN_METERS,
+            city: 'City',
+            farmerId: 1,
+            name: 'Farm',
+            state: 'ST',
+          });
+
+          totalArea += farm.total_area;
+        }),
+      );
+
+      const response = await service.sumFarmsArea();
+
+      expect(response.total).toBe(totalArea);
+    });
+
+    it('should be able to count all farms by state', async () => {
+      await farmsRepository.create({
+        agriculturalArea: 10 * HEC_IN_METERS,
+        vegetationArea: 10 * HEC_IN_METERS,
+        totalArea: 20 * HEC_IN_METERS,
+        city: 'City',
+        farmerId: 1,
+        name: 'Farm',
+        state: 'ST',
+      });
+
+      await farmsRepository.create({
+        agriculturalArea: 10 * HEC_IN_METERS,
+        vegetationArea: 10 * HEC_IN_METERS,
+        totalArea: 20 * HEC_IN_METERS,
+        city: 'City',
+        farmerId: 1,
+        name: 'Farm',
+        state: 'TS',
+      });
+
+      await farmsRepository.create({
+        agriculturalArea: 10 * HEC_IN_METERS,
+        vegetationArea: 10 * HEC_IN_METERS,
+        totalArea: 20 * HEC_IN_METERS,
+        city: 'City',
+        farmerId: 1,
+        name: 'Farm',
+        state: 'ST',
+      });
+
+      const response = await service.countFarmsByState();
+      const expectedResponse = [
+        { state: 'ST', count: 2 },
+        { state: 'TS', count: 1 },
+      ];
+
+      expect(JSON.stringify(response)).toBe(JSON.stringify(expectedResponse));
+    });
+
+    it('should be able to count the ground usage', async () => {
+      const totalFarms = Math.floor(Math.random() * 10);
+      let agricultural = 0;
+      let vegetation = 0;
+
+      await Promise.all(
+        Array.from(Array(totalFarms).keys()).map(async () => {
+          const randomAgriculturalArea = Math.floor(Math.random() * 100);
+          const randomVegetationArea = Math.floor(Math.random() * 100);
+          const farm = await farmsRepository.create({
+            agriculturalArea: randomAgriculturalArea * HEC_IN_METERS,
+            vegetationArea: randomVegetationArea * HEC_IN_METERS,
+            totalArea: 10 * HEC_IN_METERS,
+            city: 'City',
+            farmerId: 1,
+            name: 'Farm',
+            state: 'ST',
+          });
+
+          agricultural += farm.agricultural_area;
+          vegetation += farm.vegetation_area;
+        }),
+      );
+
+      const response = await service.countGroundUsage();
+
+      expect(response.agricultural).toBe(agricultural);
+      expect(response.vegetation).toBe(vegetation);
+    });
+  });
 });

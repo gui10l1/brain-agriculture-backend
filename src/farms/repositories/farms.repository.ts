@@ -1,5 +1,9 @@
 import { DataSource, Repository } from 'typeorm';
-import { IFarmsRepository } from '../interfaces/repositories.interface';
+import {
+  IAreaByState,
+  IAreaUsage,
+  IFarmsRepository,
+} from '../interfaces/repositories.interface';
 import Farm from '../entities/farm.entity';
 import { FarmDTO } from '../dtos';
 
@@ -52,5 +56,48 @@ export default class FarmsRepository implements IFarmsRepository {
 
   public async delete(farm: Farm): Promise<void> {
     await this.ormRepository.remove(farm);
+  }
+
+  public async countAll(): Promise<number> {
+    return this.ormRepository.count();
+  }
+
+  public async countAllAreaUsage(): Promise<IAreaUsage> {
+    const agriculturalResults = await this.ormRepository
+      .createQueryBuilder('area')
+      .select('SUM(area.agricultural_area)', 'sum')
+      .getRawOne<{ sum: number }>();
+
+    const vegetationResults = await this.ormRepository
+      .createQueryBuilder('area')
+      .select('SUM(area.vegetation_area)', 'sum')
+      .getRawOne<{ sum: number }>();
+
+    return {
+      agricultural: Number(agriculturalResults?.sum || 0),
+      vegetation: Number(vegetationResults?.sum || 0),
+    };
+  }
+
+  public async countAllTotalArea(): Promise<number> {
+    const results = await this.ormRepository
+      .createQueryBuilder('area')
+      .select('SUM(area.total_area)', 'sum')
+      .getRawOne<{ sum: number }>();
+
+    if (!results) return 0;
+
+    return results.sum;
+  }
+
+  public async countAreaByState(): Promise<Array<IAreaByState>> {
+    const results = await this.ormRepository
+      .createQueryBuilder('area')
+      .select('area.state', 'state')
+      .addSelect('COUNT(*)', 'count')
+      .groupBy('area.state')
+      .getRawMany<{ state: string; count: number }>();
+
+    return results;
   }
 }

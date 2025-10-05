@@ -44,7 +44,7 @@ export class FarmsController {
     return this.farmsService.create(data);
   }
 
-  @Get('/:farmerId')
+  @Get('/farmers/:farmerId')
   @ApiOperation({ summary: 'Listar todas as fazendas de um agricultor.' })
   @ApiResponse({
     status: 200,
@@ -125,5 +125,130 @@ export class FarmsController {
   })
   public async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.farmsService.delete(id);
+  }
+
+  @Get('/count')
+  @ApiOperation({ summary: 'Faz a contagem de todas as fazendas do sistema.' })
+  @ApiResponse({
+    status: 200,
+    description: 'A contagem foi realizada.',
+    schema: {
+      type: 'object',
+      properties: {
+        total: {
+          type: 'number',
+          example: 546,
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Erro interno do servidor',
+    type: ApiError,
+  })
+  public async count(): Promise<{ total: number }> {
+    const response = await this.farmsService.count();
+
+    return { total: response.count };
+  }
+
+  @Get('/state-summary')
+  @ApiOperation({ summary: 'Faz a contagem de fazendas e agrupa por estado.' })
+  @ApiResponse({
+    status: 200,
+    description: 'A contagem foi realizada.',
+    schema: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          state: {
+            type: 'string',
+            example: 'MG',
+          },
+          count: {
+            type: 'number',
+            example: 123,
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Erro interno do servidor',
+    type: ApiError,
+  })
+  public async countByState(): Promise<
+    Array<{ state: string; count: number }>
+  > {
+    const response = await this.farmsService.countFarmsByState();
+
+    return response;
+  }
+
+  @Get('/total-area')
+  @ApiOperation({
+    summary: 'Soma a área total de todas as fazendas do sistema.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'A contagem foi realizada.',
+    schema: {
+      type: 'object',
+      properties: {
+        area: {
+          type: 'number',
+          example: 546,
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Erro interno do servidor',
+    type: ApiError,
+  })
+  public async getTotalArea(): Promise<{ area: number }> {
+    const response = await this.farmsService.sumFarmsArea();
+
+    return { area: response.total };
+  }
+
+  @Get('/area-summary')
+  @ApiOperation({
+    summary:
+      'Soma as áreas agrícolas e de vegetação de todas as fazendas do sistema',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'A contagem foi realizada.',
+    schema: {
+      type: 'object',
+      properties: {
+        agricultural: {
+          type: 'number',
+          example: 150,
+        },
+        vegetation: {
+          type: 'number',
+          example: 250,
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Erro interno do servidor',
+    type: ApiError,
+  })
+  public async getAreaSummary(): Promise<{
+    agricultural: number;
+    vegetation: number;
+  }> {
+    const response = await this.farmsService.countGroundUsage();
+
+    return response;
   }
 }
