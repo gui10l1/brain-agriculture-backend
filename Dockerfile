@@ -25,4 +25,4 @@ COPY package.json pnpm-lock.yaml ./
 ENV NODE_ENV=production
 EXPOSE 3000
 
-CMD ["node", "dist/main"]
+CMD ["sh", "-c", "pnpm run migration:run:prod && node dist/main"]
