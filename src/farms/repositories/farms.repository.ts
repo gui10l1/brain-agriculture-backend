@@ -70,7 +70,7 @@ export default class FarmsRepository implements IFarmsRepository {
 
     const vegetationResults = await this.ormRepository
       .createQueryBuilder('area')
-      .select('SUM(area.agricultural_area)', 'sum')
+      .select('SUM(area.vegetation_area)', 'sum')
       .getRawOne<{ sum: number }>();
 
     return {
@@ -94,7 +94,7 @@ export default class FarmsRepository implements IFarmsRepository {
     const results = await this.ormRepository
       .createQueryBuilder('area')
       .select('area.state', 'state')
-      .addSelect('SUM(area.total_area)', 'count')
+      .addSelect('COUNT(*)', 'count')
       .groupBy('area.state')
       .getRawMany<{ state: string; count: number }>();
 
