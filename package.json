@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
     "migration:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli migration:run -d ./src/database/utils/data-source.ts",
+    "migration:run:prod": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli migration:run -d ./dist/database/utils/data-source.js",
     "migration:revert": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli migration:revert -d ./src/database/utils/data-source.ts"
   },
   "dependencies": {
