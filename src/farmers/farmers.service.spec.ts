@@ -155,4 +155,25 @@ describe('FarmersService', () => {
       expect(farmers.length).toBeFalsy();
     });
   });
+
+  describe('Get Farmer Farms', () => {
+    it('should not be able to get farms from non-existing farmers', async () => {
+      await expect(
+        service.getFarms(Math.floor(Math.random() * 10)),
+      ).rejects.toBeInstanceOf(ApiError);
+    });
+
+    it('should be able to get farms from a farmer', async () => {
+      const data = {
+        name: 'John Doe',
+        document: 'document',
+      };
+
+      const farmer = await service.create(data);
+      const farms = await service.getFarms(farmer.id);
+
+      expect(farms).toBeInstanceOf(Array);
+      expect(farms.length).toBe(0);
+    });
+  });
 });

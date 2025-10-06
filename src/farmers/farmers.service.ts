@@ -66,4 +66,12 @@ export class FarmersService {
 
     await this.farmersRepository.delete(farmer);
   }
+
+  public async getFarms(id: number) {
+    const farmer = await this.farmersRepository.findById(id, ['farms']);
+
+    if (!farmer) throw new ApiError('Agricultor não encontrado!');
+
+    return farmer.farms;
+  }
 }
