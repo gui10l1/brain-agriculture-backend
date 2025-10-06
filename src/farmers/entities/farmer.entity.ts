@@ -23,7 +23,10 @@ export default class Farmer {
   @Column('varchar', { length: 14, nullable: false })
   document: string;
 
-  @ApiProperty({ description: 'Fazendas do agricultor.' })
+  @ApiProperty({
+    description: 'Fazendas do agricultor.',
+    type: () => [Farm],
+  })
   @OneToMany(() => Farm, (farm) => farm.farmer)
   farms: Farm[];
 
