@@ -67,6 +67,34 @@ export class FarmersController {
     return this.farmersService.list();
   }
 
+  @Get('/:id/farms')
+  @ApiOperation({ summary: 'Procura por um agricultor e traz suas fazendas' })
+  @ApiResponse({
+    status: 200,
+    description: 'Informações retornadas com sucesso!',
+    type: Farmer,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Houve um erro de validação ou uma regra foi violada',
+    schema: {
+      oneOf: [
+        { $ref: '#/components/schemas/ApiError' },
+        { $ref: '#/components/schemas/ValidationError' },
+      ],
+    },
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Erro interno do servidor',
+    type: ApiError,
+  })
+  public async getFarms(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Farmer> {
+    return this.farmersService.getFarms(id);
+  }
+
   @Get('/:id')
   @ApiOperation({ summary: 'Lista todos os agricultores do sistema' })
   @ApiResponse({

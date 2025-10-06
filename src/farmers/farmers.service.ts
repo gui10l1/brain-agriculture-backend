@@ -72,6 +72,6 @@ export class FarmersService {
 
     if (!farmer) throw new ApiError('Agricultor não encontrado!');
 
-    return farmer.farms;
+    return farmer;
   }
 }

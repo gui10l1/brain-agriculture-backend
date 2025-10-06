@@ -170,10 +170,10 @@ describe('FarmersService', () => {
       };
 
       const farmer = await service.create(data);
-      const farms = await service.getFarms(farmer.id);
+      const farmerWithFarms = await service.getFarms(farmer.id);
 
-      expect(farms).toBeInstanceOf(Array);
-      expect(farms.length).toBe(0);
+      expect(farmerWithFarms.farms).toBeInstanceOf(Array);
+      expect(farmerWithFarms.farms.length).toBe(0);
     });
   });
 });
