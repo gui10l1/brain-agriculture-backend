@@ -1,11 +1,13 @@
 import { IFarmerDTO } from '../dtos';
 import Farmer from '../entities/farmer.entity';
 
+export type IJoin = 'farms';
+
 export interface IFarmersRepository {
   create(data: IFarmerDTO): Promise<Farmer>;
 
   findByDocument(document: string): Promise<Farmer | null>;
-  findById(id: number): Promise<Farmer | null>;
+  findById(id: number, join?: IJoin[]): Promise<Farmer | null>;
 
   list(): Promise<Farmer[]>;
 
