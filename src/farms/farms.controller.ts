@@ -10,7 +10,12 @@ import {
 } from '@nestjs/common';
 import Farm from './entities/farm.entity';
 import { FarmDTO, UpdateFarmDTO } from './dtos';
-import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiExcludeEndpoint,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+} from '@nestjs/swagger';
 import ApiError from 'src/errors/ApiError';
 import { FarmsService } from './farms.service';
 
@@ -44,6 +49,7 @@ export class FarmsController {
     return this.farmsService.create(data);
   }
 
+  @ApiExcludeEndpoint()
   @Get('/farmers/:farmerId')
   @ApiOperation({ summary: 'Listar todas as fazendas de um agricultor.' })
   @ApiResponse({
