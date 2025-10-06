@@ -15,6 +15,7 @@ export default class FakeFarmersRepository implements IFarmersRepository {
       id: incrementedId,
       name: data.name,
       document: data.document,
+      farms: [],
       created_at: new Date(),
       updated_at: new Date(),
     };
@@ -61,6 +62,7 @@ export default class FakeFarmersRepository implements IFarmersRepository {
       name: data.name || farmer.name,
       document: data.document || farmer.document,
       created_at: farmerToUpdate.created_at,
+      farms: farmerToUpdate.farms,
       updated_at: new Date(),
     };
 

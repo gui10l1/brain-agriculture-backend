@@ -121,6 +121,26 @@ describe('FarmersController (e2e)', () => {
       .expect(200);
   });
 
+  it('/farmers/:id/farms (GET)', async () => {
+    const data = {
+      name: 'John Doe',
+      document: 'document',
+    };
+
+    const createdFarmerResponse = await request(app.getHttpServer())
+      .post('/farmers')
+      .send(data);
+
+    return request(app.getHttpServer())
+      .get(`/farmers/${createdFarmerResponse.body.id}/farms`)
+      .expect((res) => {
+        const responseBody = res.body as Record<string, string | number>;
+
+        expect(responseBody.farms).toBeInstanceOf(Array);
+      })
+      .expect(200);
+  });
+
   it('/farmers/:id (DELETE)', async () => {
     const data = {
       name: 'John Doe',

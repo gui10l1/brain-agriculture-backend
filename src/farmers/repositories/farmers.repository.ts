@@ -1,5 +1,8 @@
 import { DataSource, Repository } from 'typeorm';
-import { IFarmersRepository } from '../interfaces/repositories.interface';
+import {
+  IFarmersRepository,
+  IJoin,
+} from '../interfaces/repositories.interface';
 import Farmer from '../entities/farmer.entity';
 import { IFarmerDTO } from '../dtos';
 
@@ -25,8 +28,11 @@ export default class FarmersRepository implements IFarmersRepository {
     return this.ormRepository.findOne({ where: { document } });
   }
 
-  public async findById(id: number): Promise<Farmer | null> {
-    return this.ormRepository.findOne({ where: { id } });
+  public async findById(id: number, joins?: IJoin[]): Promise<Farmer | null> {
+    return this.ormRepository.findOne({
+      where: { id },
+      relations: joins || [],
+    });
   }
 
   public async list(): Promise<Farmer[]> {
